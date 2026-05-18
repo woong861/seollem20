@@ -6925,11 +6925,12 @@ async function loadIncomingRequest(reqId){
     }
     incomingRequest={id:reqId,data:data};
     const r=data.requester;
-    const fullProfile=PROFILES.find(p=>p.gender===r.gender&&p.name===r.name)||{};
+    const rNameNorm=String(r.name||'').replace(/\s/g,'');
+    const fullProfile=PROFILES.find(p=>p.gender===r.gender&&String(p.name||'').replace(/\s/g,'')===rNameNorm)||{};
     const cardData={
       gender:r.gender,
       name:r.name,
-      school:fullProfile.school||r.school||'',
+      school:fullProfile.school||r.school||r.name||'',
       info:fullProfile.info||r.info||'',
       type:r.category==='소개팅'?'1:1(소개팅)':'미팅',
       intro:fullProfile.intro||r.intro||'',
