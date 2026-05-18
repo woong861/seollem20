@@ -6925,16 +6925,17 @@ async function loadIncomingRequest(reqId){
     }
     incomingRequest={id:reqId,data:data};
     const r=data.requester;
+    const fullProfile=PROFILES.find(p=>p.gender===r.gender&&p.name===r.name)||{};
     const cardData={
       gender:r.gender,
       name:r.name,
-      school:r.school||'',
-      info:r.info||'',
+      school:fullProfile.school||r.school||'',
+      info:fullProfile.info||r.info||'',
       type:r.category==='소개팅'?'1:1(소개팅)':'미팅',
-      intro:r.intro||'',
-      photos:[],
-      agePref:r.agePref||'',
-      bodyType:r.bodyType||''
+      intro:fullProfile.intro||r.intro||'',
+      photos:fullProfile.photos||[],
+      agePref:fullProfile.agePref||r.agePref||'',
+      bodyType:fullProfile.bodyType||r.bodyType||''
     };
     filtered=[cardData];
     currentCategory=r.category||'소개팅';
