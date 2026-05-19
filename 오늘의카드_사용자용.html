@@ -6862,9 +6862,10 @@ async function submitRequest(){
     return;
   }
   const me=currentApplicants[0];
+  const myProf=PROFILES.find(p=>p.gender===me.gender&&String(p.name||'').replace(/\s/g,'')===String(me.name||'').replace(/\s/g,''))||{};
   const payload={
     action:'request',
-    requester:{gender:me.gender,name:me.name,phone:me.phone,category:currentCategory},
+    requester:{gender:me.gender,name:me.name,phone:me.phone,category:currentCategory,school:myProf.school||''},
     target:{gender:pendingTarget.gender,name:pendingTarget.name,school:pendingTarget.school,type:pendingTarget.type}
   };
   try{
@@ -6940,7 +6941,7 @@ async function loadIncomingRequest(reqId){
     const cardData={
       gender:r.gender,
       name:r.name,
-      school:fullProfile.school||r.school||r.name||'',
+      school:fullProfile.school||r.school||'',
       info:fullProfile.info||r.info||'',
       type:r.category==='소개팅'?'1:1(소개팅)':'미팅',
       intro:fullProfile.intro||r.intro||'',
