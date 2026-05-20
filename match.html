@@ -477,6 +477,188 @@
     line-height: 1.6;
   }
 
+  /* Multi-profile view */
+  .multi-container {
+    display: none;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .multi-container.active {
+    display: block;
+    animation: bloom 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .multi-header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .multi-header .heart-big {
+    font-size: 44px;
+    margin-bottom: 8px;
+    animation: heartPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+  }
+  .multi-header h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .multi-header p {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .profile-mini {
+    background: var(--cream);
+    border-radius: 18px;
+    padding: 24px 20px 18px;
+    margin-bottom: 16px;
+    border: 2px solid var(--border);
+    box-shadow: 0 8px 24px rgba(255,107,157,0.10);
+    position: relative;
+    transition: all 0.3s;
+  }
+  .profile-mini.liked {
+    border-color: var(--pink);
+    box-shadow: 0 10px 28px rgba(255,107,157,0.30);
+  }
+  .profile-mini.skipped {
+    opacity: 0.5;
+  }
+  .profile-mini-num {
+    position: absolute;
+    top: -11px;
+    left: 16px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(255,107,157,0.35);
+    letter-spacing: 0.5px;
+  }
+  .profile-mini-meta {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+    text-align: center;
+    word-break: keep-all;
+  }
+  .profile-mini-meta .sep { margin: 0 6px; opacity: 0.5; }
+  .profile-mini-intro {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 14px;
+    color: #4a3340;
+    line-height: 1.65;
+    background: var(--pink-pale);
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+  .profile-mini-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  .mini-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 50px;
+    border: 1.5px solid transparent;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mini-btn.yes {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white;
+    box-shadow: 0 4px 12px rgba(255,107,157,0.25);
+  }
+  .mini-btn.yes:hover { transform: translateY(-1px); }
+  .mini-btn.no {
+    background: white;
+    color: var(--text-muted);
+    border-color: var(--border);
+  }
+  .mini-btn.no:hover { background: var(--bg); border-color: var(--pink-light); color: var(--pink); }
+  .mini-btn.selected {
+    background: linear-gradient(135deg, #6dcc7a, #4ade80);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: default;
+  }
+  .mini-btn.skipped-state {
+    background: #F3F4F6;
+    color: #6B7280;
+    border: 1.5px solid #D1D5DB;
+    font-weight: 500;
+    cursor: default;
+  }
+  .mini-btn.undo {
+    background: none;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    flex: 0 0 auto;
+    padding: 9px 14px;
+  }
+  .mini-btn.undo:hover { color: var(--pink); border-color: var(--pink-light); }
+
+  .multi-summary {
+    background: white;
+    border: 1.5px dashed var(--pink-light);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .multi-summary h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--pink);
+    margin-bottom: 10px;
+  }
+  .multi-summary p {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .multi-summary .picks {
+    margin-top: 4px;
+    min-height: 22px;
+  }
+  .pick-pill {
+    display: inline-block;
+    margin: 3px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--pink-pale), #FFE4F0);
+    color: var(--pink);
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--pink-light);
+  }
+  .picks-empty {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
   /* Confetti */
   .confetti {
     position: fixed;
@@ -534,6 +716,20 @@
     </div>
   </div>
 
+  <div class="multi-container" id="multiContainer">
+    <div class="multi-header">
+      <div class="heart-big">💝</div>
+      <h2 id="multiTitle">후보 프로필이 도착했어요</h2>
+      <p>마음에 드시는 분 선택 후<br>운영진에게 카톡으로 답해주세요 :)</p>
+    </div>
+    <div id="profileList"></div>
+    <div class="multi-summary">
+      <h3>📩 운영진에게 알려주세요</h3>
+      <p>마음에 드는 후보 번호를 카톡으로 답장 주세요</p>
+      <div class="picks" id="multiPicks"><span class="picks-empty">아직 선택하지 않으셨어요</span></div>
+    </div>
+  </div>
+
   <div class="error-card" id="errorCard">
     <div class="icon">😢</div>
     <h2>프로필을 찾을 수 없어요</h2>
@@ -548,12 +744,12 @@
 var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$",e={};function t(r,o){if(!e[r]){e[r]={};for(var n=0;n<r.length;n++)e[r][r.charAt(n)]=n}return e[r][o]}var i={compressToBase64:function(r){if(null==r)return"";var n=i._compress(r,6,function(r){return o.charAt(r)});switch(n.length%4){default:case 0:return n;case 1:return n+"===";case 2:return n+"==";case 3:return n+"="}},decompressFromBase64:function(r){return null==r?"":""==r?null:i._decompress(r.length,32,function(n){return t(o,r.charAt(n))})},compressToUTF16:function(o){return null==o?"":i._compress(o,15,function(o){return r(o+32)})+" "},decompressFromUTF16:function(r){return null==r?"":""==r?null:i._decompress(r.length,16384,function(o){return r.charCodeAt(o)-32})},compressToUint8Array:function(r){for(var o=i.compress(r),n=new Uint8Array(2*o.length),e=0,t=o.length;e<t;e++){var s=o.charCodeAt(e);n[2*e]=s>>>8,n[2*e+1]=s%256}return n},decompressFromUint8Array:function(o){if(null==o)return i.decompress(o);for(var n=new Array(o.length/2),e=0,t=n.length;e<t;e++)n[e]=256*o[2*e]+o[2*e+1];var s=[];return n.forEach(function(o){s.push(r(o))}),i.decompress(s.join(""))},compressToEncodedURIComponent:function(r){return null==r?"":i._compress(r,6,function(r){return n.charAt(r)})},decompressFromEncodedURIComponent:function(r){return null==r?"":""==r?null:(r=r.replace(/ /g,"+"),i._decompress(r.length,32,function(o){return t(n,r.charAt(o))}))},compress:function(o){return i._compress(o,16,function(o){return r(o)})},_compress:function(r,o,n){if(null==r)return"";var e,t,i,s={},u={},a="",p="",c="",l=2,f=3,h=2,d=[],m=0,v=0;for(i=0;i<r.length;i+=1)if(a=r.charAt(i),Object.prototype.hasOwnProperty.call(s,a)||(s[a]=f++,u[a]=!0),p=c+a,Object.prototype.hasOwnProperty.call(s,p))c=p;else{if(Object.prototype.hasOwnProperty.call(u,c)){if(c.charCodeAt(0)<256){for(e=0;e<h;e++)m<<=1,v==o-1?(v=0,d.push(n(m)),m=0):v++;for(t=c.charCodeAt(0),e=0;e<8;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1}else{for(t=1,e=0;e<h;e++)m=m<<1|t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t=0;for(t=c.charCodeAt(0),e=0;e<16;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1}0==--l&&(l=Math.pow(2,h),h++),delete u[c]}else for(t=s[c],e=0;e<h;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1;0==--l&&(l=Math.pow(2,h),h++),s[p]=f++,c=String(a)}if(""!==c){if(Object.prototype.hasOwnProperty.call(u,c)){if(c.charCodeAt(0)<256){for(e=0;e<h;e++)m<<=1,v==o-1?(v=0,d.push(n(m)),m=0):v++;for(t=c.charCodeAt(0),e=0;e<8;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1}else{for(t=1,e=0;e<h;e++)m=m<<1|t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t=0;for(t=c.charCodeAt(0),e=0;e<16;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1}0==--l&&(l=Math.pow(2,h),h++),delete u[c]}else for(t=s[c],e=0;e<h;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1;0==--l&&(l=Math.pow(2,h),h++)}for(t=2,e=0;e<h;e++)m=m<<1|1&t,v==o-1?(v=0,d.push(n(m)),m=0):v++,t>>=1;for(;;){if(m<<=1,v==o-1){d.push(n(m));break}v++}return d.join("")},decompress:function(r){return null==r?"":""==r?null:i._decompress(r.length,32768,function(o){return r.charCodeAt(o)})},_decompress:function(o,n,e){var t,i,s,u,a,p,c,l=[],f=4,h=4,d=3,m="",v=[],g={val:e(0),position:n,index:1};for(t=0;t<3;t+=1)l[t]=t;for(s=0,a=Math.pow(2,2),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;switch(s){case 0:for(s=0,a=Math.pow(2,8),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;c=r(s);break;case 1:for(s=0,a=Math.pow(2,16),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;c=r(s);break;case 2:return""}for(l[3]=c,i=c,v.push(c);;){if(g.index>o)return"";for(s=0,a=Math.pow(2,d),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;switch(c=s){case 0:for(s=0,a=Math.pow(2,8),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;l[h++]=r(s),c=h-1,f--;break;case 1:for(s=0,a=Math.pow(2,16),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=n,g.val=e(g.index++)),s|=(u>0?1:0)*p,p<<=1;l[h++]=r(s),c=h-1,f--;break;case 2:return v.join("")}if(0==f&&(f=Math.pow(2,d),d++),l[c])m=l[c];else{if(c!==h)return null;m=i+i.charAt(0)}v.push(m),l[h++]=i+m.charAt(0),i=m,0==--f&&(f=Math.pow(2,d),d++)}}};return i}();
 
 function decode(str) {
-  // 새 형식 (LZString 압축) 먼저 시도
+  // 새 형식 (LZString 압축) 먼저 시도 — object 또는 array 둘 다 허용
   try {
     const json = LZString.decompressFromEncodedURIComponent(str);
     if (json) {
       const parsed = JSON.parse(json);
-      if (parsed && (parsed.s || parsed.i || parsed.b)) return parsed;
+      if (parsed) return parsed;
     }
   } catch (e) {}
   // 구 형식 (base64) 폴백
@@ -572,32 +768,126 @@ const p = params.get('p');
 let matchData = p ? decode(p) : null;
 
 // 이름은 의도적으로 URL에 포함 안 함 — meta(학교/학과)나 intro로 페이로드 유효성 판단
-if (!matchData || (!matchData.s && !matchData.i && !matchData.b)) {
+// matchData는 단일 프로필 object 또는 array (여러 후보) 가능
+function validProfile(p) { return p && (p.s || p.i || p.b); }
+function validData(d) {
+  if (Array.isArray(d)) return d.length > 0 && d.every(validProfile);
+  return validProfile(d);
+}
+if (!matchData || !validData(matchData)) {
   document.getElementById('stage').style.display = 'none';
   document.getElementById('errorCard').classList.add('active');
+  matchData = null;
 }
 
 function reveal() {
   if (!matchData) return;
   document.getElementById('stage').style.display = 'none';
 
+  // Array면 multi 뷰, object면 single 뷰
+  if (Array.isArray(matchData)) {
+    renderMulti(matchData);
+  } else {
+    renderSingle(matchData);
+  }
+
+  document.getElementById('footerNote').style.display = 'block';
+  setTimeout(launchConfetti, 250);
+}
+
+function renderSingle(p) {
   const metaParts = [];
-  if (matchData.s) metaParts.push('🏫 ' + matchData.s);
-  if (matchData.i) metaParts.push(matchData.i);
+  if (p.s) metaParts.push('🏫 ' + p.s);
+  if (p.i) metaParts.push(p.i);
   if (metaParts.length) {
     document.getElementById('matchMeta').innerHTML = metaParts.join('<span class="sep">·</span>');
   }
 
-  if (matchData.b) {
+  if (p.b) {
     document.getElementById('matchIntro').style.display = 'block';
-    document.getElementById('matchIntroText').textContent = matchData.b;
+    document.getElementById('matchIntroText').textContent = p.b;
   }
 
   document.getElementById('revealCard').classList.add('active');
-  document.getElementById('footerNote').style.display = 'block';
-
-  setTimeout(launchConfetti, 250);
 }
+
+const multiState = {}; // {1: 'yes', 2: 'no', ...}
+
+function renderMulti(profiles) {
+  document.getElementById('multiTitle').textContent = profiles.length + '명의 후보를 만나보세요';
+  const list = document.getElementById('profileList');
+  list.innerHTML = '';
+  profiles.forEach((p, idx) => {
+    list.appendChild(buildMiniCard(p, idx + 1));
+  });
+  document.getElementById('multiContainer').classList.add('active');
+}
+
+function buildMiniCard(p, num) {
+  const card = document.createElement('div');
+  card.className = 'profile-mini';
+  card.id = 'pmini' + num;
+
+  const metaParts = [];
+  if (p.s) metaParts.push('🏫 ' + escH(p.s));
+  if (p.i) metaParts.push(escH(p.i));
+  const metaHtml = metaParts.length ? metaParts.join('<span class="sep">·</span>') : '';
+
+  const introHtml = p.b ? '<div class="profile-mini-intro">' + escH(p.b) + '</div>' : '';
+
+  card.innerHTML =
+    '<div class="profile-mini-num">후보 ' + num + '번</div>' +
+    (metaHtml ? '<div class="profile-mini-meta">' + metaHtml + '</div>' : '') +
+    introHtml +
+    '<div class="profile-mini-buttons" id="pbtns' + num + '">' +
+    '  <button class="mini-btn yes" onclick="pickProfile(' + num + ', \'yes\')">💝 좋아요</button>' +
+    '  <button class="mini-btn no" onclick="pickProfile(' + num + ', \'no\')">🌸 다음에</button>' +
+    '</div>';
+
+  return card;
+}
+
+function pickProfile(num, choice) {
+  multiState[num] = choice;
+  const card = document.getElementById('pmini' + num);
+  if (choice === 'yes') {
+    card.classList.add('liked');
+    card.classList.remove('skipped');
+  } else {
+    card.classList.add('skipped');
+    card.classList.remove('liked');
+  }
+  const btns = document.getElementById('pbtns' + num);
+  const stateClass = choice === 'yes' ? 'selected' : 'skipped-state';
+  const stateLabel = choice === 'yes' ? '✓ 좋아요' : '✓ 다음에';
+  btns.innerHTML =
+    '<button class="mini-btn ' + stateClass + '">' + stateLabel + '</button>' +
+    '<button class="mini-btn undo" onclick="resetPick(' + num + ')">↻ 다시</button>';
+  updateMultiPicks();
+}
+
+function resetPick(num) {
+  delete multiState[num];
+  const card = document.getElementById('pmini' + num);
+  card.classList.remove('liked', 'skipped');
+  const btns = document.getElementById('pbtns' + num);
+  btns.innerHTML =
+    '<button class="mini-btn yes" onclick="pickProfile(' + num + ', \'yes\')">💝 좋아요</button>' +
+    '<button class="mini-btn no" onclick="pickProfile(' + num + ', \'no\')">🌸 다음에</button>';
+  updateMultiPicks();
+}
+
+function updateMultiPicks() {
+  const picks = document.getElementById('multiPicks');
+  const liked = Object.keys(multiState).filter(k => multiState[k] === 'yes').sort((a, b) => +a - +b);
+  if (liked.length === 0) {
+    picks.innerHTML = '<span class="picks-empty">아직 선택하지 않으셨어요</span>';
+  } else {
+    picks.innerHTML = liked.map(n => '<span class="pick-pill">💝 ' + n + '번</span>').join('');
+  }
+}
+
+function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function respond(choice) {
   document.getElementById('consentSection').style.display = 'none';
