@@ -514,7 +514,6 @@
   <div class="reveal-card" id="revealCard">
     <div class="heart-big">💝</div>
     <div class="label">소개해드리고 싶은 분이에요</div>
-    <div class="match-name" id="matchName"></div>
     <div class="meta-row" id="matchMeta"></div>
     <div class="intro" id="matchIntro" style="display:none"><span class="intro-text" id="matchIntroText"></span></div>
 
@@ -554,7 +553,7 @@ function decode(str) {
     const json = LZString.decompressFromEncodedURIComponent(str);
     if (json) {
       const parsed = JSON.parse(json);
-      if (parsed && parsed.n) return parsed;
+      if (parsed && (parsed.s || parsed.i || parsed.b)) return parsed;
     }
   } catch (e) {}
   // 구 형식 (base64) 폴백
@@ -572,7 +571,8 @@ const params = new URLSearchParams(location.search);
 const p = params.get('p');
 let matchData = p ? decode(p) : null;
 
-if (!matchData || !matchData.n) {
+// 이름은 의도적으로 URL에 포함 안 함 — meta(학교/학과)나 intro로 페이로드 유효성 판단
+if (!matchData || (!matchData.s && !matchData.i && !matchData.b)) {
   document.getElementById('stage').style.display = 'none';
   document.getElementById('errorCard').classList.add('active');
 }
@@ -580,8 +580,6 @@ if (!matchData || !matchData.n) {
 function reveal() {
   if (!matchData) return;
   document.getElementById('stage').style.display = 'none';
-
-  document.getElementById('matchName').textContent = matchData.n;
 
   const metaParts = [];
   if (matchData.s) metaParts.push('🏫 ' + matchData.s);
