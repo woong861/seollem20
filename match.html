@@ -672,6 +672,36 @@
     0%   { transform: translate(var(--start-x), -20px) rotate(0); opacity: 1; }
     100% { transform: translate(var(--end-x), 110vh) rotate(720deg); opacity: 0; }
   }
+
+  /* 응답 전송 toast (멀티 모드 pickProfile 피드백) */
+  .pick-toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(28,10,22,0.92);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-family: 'Gowun Dodum', sans-serif;
+    box-shadow: 0 8px 24px rgba(255,107,157,0.25);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    white-space: nowrap;
+  }
+  .pick-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .pick-toast.yes {
+    background: linear-gradient(135deg, #FF6B9D, #C084FC);
+  }
+  .pick-toast.no {
+    background: rgba(155, 107, 128, 0.92);
+  }
 </style>
 </head>
 <body>
@@ -715,6 +745,8 @@
       <button class="redo-btn" onclick="resetResponse()">↻ 다시 선택</button>
     </div>
   </div>
+
+  <div class="pick-toast" id="pickToast"></div>
 
   <div class="multi-container" id="multiContainer">
     <div class="multi-header">
@@ -867,6 +899,19 @@ function buildMiniCard(p, num) {
   return card;
 }
 
+function showPickToast(num, choice) {
+  const toast = document.getElementById('pickToast');
+  if (!toast) return;
+  toast.classList.remove('yes', 'no');
+  toast.classList.add(choice === 'yes' ? 'yes' : 'no');
+  toast.textContent = (choice === 'yes' ? '💝 ' : '🌸 ') + num + '번 ' + (choice === 'yes' ? '좋아요 전송됨' : '다음에 전송됨');
+  // 강제 reflow → 애니메이션 트리거
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
 function pickProfile(num, choice) {
   // 좋아요 한도 체크 — 최대치 도달했고 새로 좋아요면 차단
   if (choice === 'yes' && multiState[num] !== 'yes') {
@@ -887,6 +932,7 @@ function pickProfile(num, choice) {
       choice
     });
   }
+  showPickToast(num, choice);
 
   multiState[num] = choice;
   const card = document.getElementById('pmini' + num);
@@ -971,13 +1017,13 @@ function respond(choice) {
     title.textContent = '좋아요를 선택하셨어요!';
     title.classList.remove('no-style');
     text.classList.remove('no-style');
-    text.innerHTML = '운영진에게 카톡으로 <b>"좋아요"</b> 답장 주시면<br>상대방 동의도 확인 후 카톡방을 열어드려요 :)';
+    text.innerHTML = '응답이 운영진에게 전달됐어요 ✓<br>상대방 동의도 확인되면 카톡방을 열어드릴게요 :)';
   } else {
     icon.textContent = '🌸';
     title.textContent = '다음 인연을 기다려요';
     title.classList.add('no-style');
     text.classList.add('no-style');
-    text.innerHTML = '운영진에게 카톡으로 <b>"다음에"</b>로<br>답장 주시면 됩니다.';
+    text.innerHTML = '응답이 운영진에게 전달됐어요 ✓<br>다음에 더 잘 맞는 인연으로 안내드릴게요.';
   }
 }
 
