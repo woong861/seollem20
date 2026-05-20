@@ -779,6 +779,7 @@ const params = new URLSearchParams(location.search);
 const p = params.get('p');
 const matchId = params.get('m') || null;    // 매칭 ID (운영자 매칭 생성 시 부여)
 const candNum = params.get('c') || null;    // 후보 번호 (있으면 = 후보가 보는 화면)
+const maxLikes = parseInt(params.get('n') || '1', 10);  // 받는 분이 좋아요 가능한 최대 인원
 const isCandidate = !!candNum;               // c 있음 = 후보 / 없음 = 받는 분
 let matchData = p ? decode(p) : null;
 
@@ -829,13 +830,17 @@ function renderSingle(p) {
 const multiState = {}; // {1: 'yes', 2: 'no', ...}
 
 function renderMulti(profiles) {
-  document.getElementById('multiTitle').textContent = profiles.length + '명의 후보를 만나보세요';
+  const titleText = maxLikes >= profiles.length
+    ? profiles.length + '명의 후보를 만나보세요'
+    : profiles.length + '명 중 ' + maxLikes + '명까지 선택 가능';
+  document.getElementById('multiTitle').textContent = titleText;
   const list = document.getElementById('profileList');
   list.innerHTML = '';
   profiles.forEach((p, idx) => {
     list.appendChild(buildMiniCard(p, idx + 1));
   });
   document.getElementById('multiContainer').classList.add('active');
+  updateMultiPicks();  // 초기 카운터 표시
 }
 
 function buildMiniCard(p, num) {
@@ -863,6 +868,15 @@ function buildMiniCard(p, num) {
 }
 
 function pickProfile(num, choice) {
+  // 좋아요 한도 체크 — 최대치 도달했고 새로 좋아요면 차단
+  if (choice === 'yes' && multiState[num] !== 'yes') {
+    const currentLikes = Object.values(multiState).filter(v => v === 'yes').length;
+    if (currentLikes >= maxLikes) {
+      alert('좋아요는 최대 ' + maxLikes + '명까지 가능해요.\n다른 후보 선택을 취소(↻ 다시)하시면 추가 선택 가능합니다.');
+      return;
+    }
+  }
+
   // 백엔드에 응답 전송 (멀티 모드 = 받는 분 응답)
   if (matchId) {
     postToBackend({
@@ -906,11 +920,28 @@ function resetPick(num) {
 function updateMultiPicks() {
   const picks = document.getElementById('multiPicks');
   const liked = Object.keys(multiState).filter(k => multiState[k] === 'yes').sort((a, b) => +a - +b);
+  let html = '';
   if (liked.length === 0) {
-    picks.innerHTML = '<span class="picks-empty">아직 선택하지 않으셨어요</span>';
+    html = '<span class="picks-empty">아직 선택하지 않으셨어요 (' + liked.length + '/' + maxLikes + ')</span>';
   } else {
-    picks.innerHTML = liked.map(n => '<span class="pick-pill">💝 ' + n + '번</span>').join('');
+    html = liked.map(n => '<span class="pick-pill">💝 ' + n + '번</span>').join('') +
+      ' <span class="picks-empty" style="margin-left:6px">(' + liked.length + '/' + maxLikes + ')</span>';
   }
+  picks.innerHTML = html;
+
+  // 한도 도달 시 모든 미선택 카드의 좋아요 버튼 disable
+  const atMax = liked.length >= maxLikes;
+  document.querySelectorAll('[id^="pmini"]').forEach(card => {
+    const num = card.id.replace('pmini', '');
+    if (multiState[num]) return; // 이미 선택한 카드는 건너뜀
+    const yesBtn = card.querySelector('.mini-btn.yes');
+    if (yesBtn) {
+      yesBtn.disabled = atMax;
+      yesBtn.style.opacity = atMax ? '0.4' : '';
+      yesBtn.style.cursor = atMax ? 'not-allowed' : '';
+      yesBtn.title = atMax ? '좋아요 한도(' + maxLikes + '명) 도달' : '';
+    }
+  });
 }
 
 function escH(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
