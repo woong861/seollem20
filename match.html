@@ -822,10 +822,25 @@ function validData(d) {
   if (Array.isArray(d)) return d.length > 0 && d.every(validProfile);
   return validProfile(d);
 }
-if (!matchData || !validData(matchData)) {
+function showError() {
   document.getElementById('stage').style.display = 'none';
   document.getElementById('errorCard').classList.add('active');
   matchData = null;
+}
+if (!matchData && matchId && !p) {
+  // 백엔드에서 matchId로 후보 조회 (URL 축소 방식)
+  fetch(APPS_SCRIPT_URL + '?mid=' + encodeURIComponent(matchId))
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.p) {
+        try { matchData = decode(data.p); } catch(e) {}
+      }
+      if (data && typeof data.n === 'number') window.__fetchedMaxLikes = data.n;
+      if (!matchData || !validData(matchData)) showError();
+    })
+    .catch(() => showError());
+} else if (!matchData || !validData(matchData)) {
+  showError();
 }
 
 function reveal() {
