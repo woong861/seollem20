@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설렘,스물 💗 관리자</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B9D; --pink-light: #FFB3CC; --pink-pale: #FFF0F5;
+    --purple: #8B5CF6; --purple-pale: #F5F3FF;
+    --bg: #FFF8FC; --card: #FFFFFF;
+    --text: #1C0A16; --muted: #9B6B80;
+    --border: rgba(255,107,157,0.18);
+    --shadow: 0 8px 32px rgba(255,107,157,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Gowun Dodum', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 32px 20px; }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 32px; }
+  .header h1 { font-family: 'Noto Serif KR', serif; font-size: 32px; font-weight: 600;
+    background: linear-gradient(135deg,#FF6B9D 0%,#8B5CF6 60%,#FB7185 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 8px; }
+  .header p { color: var(--muted); font-size: 14px; }
+  .refresh-btn { display: inline-block; margin: 16px auto 24px; padding: 10px 24px;
+    background: var(--purple-pale); color: var(--purple); border: 1px solid var(--purple);
+    border-radius: 50px; font-family: 'Gowun Dodum'; font-size: 14px; cursor: pointer;
+    transition: all .2s; }
+  .refresh-btn:hover { background: var(--purple); color: white; }
+  .center { text-align: center; }
+  .stats { background: linear-gradient(135deg, var(--pink-pale), var(--purple-pale));
+    border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+    text-align: center; margin-bottom: 24px; color: var(--text); font-size: 15px; }
+  .stats strong { color: var(--pink); font-size: 24px; font-family: 'Noto Serif KR', serif; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 15px; }
+  .empty .emoji { font-size: 48px; margin-bottom: 16px; }
+  .card { background: var(--card); border-radius: 16px; border: 1px solid var(--border);
+    padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow); transition: all .2s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,107,157,0.2); }
+  .card-header { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+  .pair-name { font-size: 18px; font-weight: 600; color: var(--text); }
+  .pair-time { font-size: 12px; color: var(--muted); }
+  .pair-id { font-size: 11px; color: var(--muted); font-family: monospace;
+    background: var(--pink-pale); padding: 4px 10px; border-radius: 6px;
+    display: inline-block; margin-bottom: 12px; }
+  .action-btn { padding: 12px 24px; border-radius: 10px; border: none;
+    font-family: 'Gowun Dodum'; font-size: 14px; cursor: pointer; transition: all .2s;
+    display: inline-block; }
+  .confirm-btn { background: linear-gradient(135deg, #FF6B9D, #FB7185); color: white; }
+  .confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,157,.35); }
+  .confirm-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: white; padding: 12px 24px; border-radius: 50px;
+    font-size: 14px; opacity: 0; transition: opacity .3s; z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .toast.show { opacity: 1; }
+  .toast.success { background: linear-gradient(135deg, #FF6B9D, #FB7185); }
+  .toast.error { background: #DC2626; }
+  .loading { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--pink-pale);
+    border-top-color: var(--pink); border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>💗 설렘,스물 관리자</h1>
+    <p>오늘의 카드 - 개설비 입금 확인 후 카톡 아이디 교환</p>
+    <button class="refresh-btn" onclick="load()">🔄 새로고침</button>
+  </div>
+  <div class="stats" id="stats">불러오는 중...</div>
+  <div id="list"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbyfFmrwmLy-YPUnZxmU9uiFjqUjklMxGTCDcW2aKifa763oj3HQXU6vx8dGcvS01QRq/exec';
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function fmtTime(iso) {
+  if (!iso) return '';
+  try {
+    var d = new Date(iso);
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    var hh = String(d.getHours()).padStart(2, '0');
+    var mi = String(d.getMinutes()).padStart(2, '0');
+    return mm + '/' + dd + ' ' + hh + ':' + mi;
+  } catch (e) { return iso; }
+}
+
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+async function load() {
+  document.getElementById('list').innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:12px">불러오는 중...</p></div>';
+  document.getElementById('stats').textContent = '불러오는 중...';
+  try {
+    var res = await fetch(API + '?admin=pending');
+    var data = await res.json();
+    if (!Array.isArray(data)) {
+      document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">⚠️</div>응답 형식 오류</div>';
+      return;
+    }
+    document.getElementById('stats').innerHTML = '입금 대기중 <strong>' + data.length + '</strong>건';
+    if (data.length === 0) {
+      document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">✨</div>대기중인 매칭이 없어요<br><span style="font-size:13px;margin-top:8px;display:inline-block">양쪽 좋아요 매칭이 발생하면 여기에 표시됩니다</span></div>';
+      return;
+    }
+    var html = data.map(function(p) {
+      return '<div class="card" id="pair_' + esc(p.pairId) + '">' +
+        '<div class="card-header">' +
+          '<div class="pair-name">💝 ' + esc(p.pairName) + '</div>' +
+          '<div class="pair-time">' + esc(fmtTime(p.time)) + '</div>' +
+        '</div>' +
+        '<div class="pair-id">' + esc(p.pairId) + '</div><br>' +
+        '<button class="action-btn confirm-btn" onclick="confirmPay(\'' + esc(p.pairId).replace(/\\'/g, "\\'") + '\')">✅ 입금 확인 → 카톡 교환 발송</button>' +
+      '</div>';
+    }).join('');
+    document.getElementById('list').innerHTML = html;
+  } catch (err) {
+    document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">❌</div>불러오기 실패<br><span style="font-size:12px">' + esc(err.message || err) + '</span></div>';
+    document.getElementById('stats').textContent = '오류';
+  }
+}
+
+async function confirmPay(pairId) {
+  if (!window.confirm('입금 확인 완료로 처리하시겠습니까?\n남녀 양쪽에게 카톡 아이디 교환 문자가 발송됩니다.\n\n' + pairId)) return;
+  var card = document.getElementById('pair_' + pairId);
+  var btn = card ? card.querySelector('.confirm-btn') : null;
+  if (btn) { btn.disabled = true; btn.textContent = '처리 중...'; }
+  try {
+    var res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ type: 'odayConfirm', pairId: pairId }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    var result = await res.json();
+    if (result && result.ok) {
+      toast('✅ 카톡 교환 문자 발송 완료', 'success');
+      if (card) card.style.opacity = '0.4';
+      setTimeout(load, 1500);
+    } else {
+      toast('❌ 실패: ' + (result && result.err || '알 수 없음'), 'error');
+      if (btn) { btn.disabled = false; btn.textContent = '✅ 입금 확인 → 카톡 교환 발송'; }
+    }
+  } catch (err) {
+    toast('❌ 네트워크 오류: ' + (err.message || err), 'error');
+    if (btn) { btn.disabled = false; btn.textContent = '✅ 입금 확인 → 카톡 교환 발송'; }
+  }
+}
+
+load();
+</script>
+</body>
+</html>
