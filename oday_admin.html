@@ -9,48 +9,65 @@
   :root {
     --pink: #FF6B9D; --pink-light: #FFB3CC; --pink-pale: #FFF0F5;
     --purple: #8B5CF6; --purple-pale: #F5F3FF;
+    --blue: #3B82F6; --blue-pale: #EFF6FF;
+    --green: #10B981; --green-pale: #ECFDF5;
+    --orange: #F59E0B; --orange-pale: #FFFBEB;
+    --gray: #6B7280; --gray-pale: #F3F4F6;
     --bg: #FFF8FC; --card: #FFFFFF;
     --text: #1C0A16; --muted: #9B6B80;
     --border: rgba(255,107,157,0.18);
-    --shadow: 0 8px 32px rgba(255,107,157,0.15);
+    --shadow: 0 4px 20px rgba(255,107,157,0.10);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Gowun Dodum', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 32px 20px; }
-  .wrap { max-width: 780px; margin: 0 auto; }
-  .header { text-align: center; margin-bottom: 32px; }
-  .header h1 { font-family: 'Noto Serif KR', serif; font-size: 32px; font-weight: 600;
+  body { font-family: 'Gowun Dodum', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 24px 16px 60px; font-size: 14px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 24px; }
+  .header h1 { font-family: 'Noto Serif KR', serif; font-size: 28px; font-weight: 600;
     background: linear-gradient(135deg,#FF6B9D 0%,#8B5CF6 60%,#FB7185 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    margin-bottom: 8px; }
-  .header p { color: var(--muted); font-size: 14px; }
-  .refresh-btn { display: inline-block; margin: 16px auto 24px; padding: 10px 24px;
-    background: var(--purple-pale); color: var(--purple); border: 1px solid var(--purple);
-    border-radius: 50px; font-family: 'Gowun Dodum'; font-size: 14px; cursor: pointer;
-    transition: all .2s; }
-  .refresh-btn:hover { background: var(--purple); color: white; }
-  .center { text-align: center; }
-  .stats { background: linear-gradient(135deg, var(--pink-pale), var(--purple-pale));
-    border: 1px solid var(--border); border-radius: 16px; padding: 20px;
-    text-align: center; margin-bottom: 24px; color: var(--text); font-size: 15px; }
-  .stats strong { color: var(--pink); font-size: 24px; font-family: 'Noto Serif KR', serif; }
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 15px; }
-  .empty .emoji { font-size: 48px; margin-bottom: 16px; }
-  .card { background: var(--card); border-radius: 16px; border: 1px solid var(--border);
-    padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow); transition: all .2s; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,107,157,0.2); }
-  .card-header { display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-  .pair-name { font-size: 18px; font-weight: 600; color: var(--text); }
-  .pair-time { font-size: 12px; color: var(--muted); }
-  .pair-id { font-size: 11px; color: var(--muted); font-family: monospace;
-    background: var(--pink-pale); padding: 4px 10px; border-radius: 6px;
-    display: inline-block; margin-bottom: 12px; }
-  .action-btn { padding: 12px 24px; border-radius: 10px; border: none;
-    font-family: 'Gowun Dodum'; font-size: 14px; cursor: pointer; transition: all .2s;
-    display: inline-block; }
-  .confirm-btn { background: linear-gradient(135deg, #FF6B9D, #FB7185); color: white; }
-  .confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,157,.35); }
-  .confirm-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    margin-bottom: 4px; }
+  .header p { color: var(--muted); font-size: 13px; }
+  .toolbar { display: flex; justify-content: center; gap: 8px; margin: 16px 0 24px; flex-wrap: wrap; }
+  .btn { padding: 8px 16px; border-radius: 50px; font-family: 'Gowun Dodum'; font-size: 13px; cursor: pointer; border: 1px solid var(--purple); background: var(--purple-pale); color: var(--purple); transition: all .2s; }
+  .btn:hover { background: var(--purple); color: white; }
+  .btn.active { background: var(--pink); color: white; border-color: var(--pink); }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; box-shadow: var(--shadow); }
+  .stat .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-family: 'Noto Serif KR', serif; font-weight: 600; color: var(--text); }
+  .stat.pink .value { color: var(--pink); }
+  .stat.purple .value { color: var(--purple); }
+  .stat.blue .value { color: var(--blue); }
+  .stat.green .value { color: var(--green); }
+  .stat.orange .value { color: var(--orange); }
+  section { margin-bottom: 32px; }
+  section h2 { font-family: 'Noto Serif KR', serif; font-size: 18px; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  section h2 .count { background: var(--pink-pale); color: var(--pink); font-family: 'Gowun Dodum'; font-size: 12px; padding: 2px 10px; border-radius: 20px; font-weight: normal; }
+  .empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; }
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--gray-pale); vertical-align: top; }
+  th { background: var(--pink-pale); color: var(--pink); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--pink-pale); background-opacity: 0.3; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge.wait { background: var(--gray-pale); color: var(--gray); }
+  .badge.yes { background: var(--green-pale); color: var(--green); }
+  .badge.no { background: #FEE2E2; color: #DC2626; }
+  .badge.mutual { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+  .badge.paid { background: var(--blue-pale); color: var(--blue); }
+  .badge.opened { background: var(--green-pale); color: var(--green); }
+  .mid { font-family: monospace; font-size: 10px; color: var(--muted); background: var(--gray-pale); padding: 2px 6px; border-radius: 4px; }
+  .who { font-weight: 600; }
+  .arrow { color: var(--pink); margin: 0 6px; font-weight: bold; }
+  .time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .link { color: var(--purple); text-decoration: none; font-size: 12px; }
+  .link:hover { text-decoration: underline; }
+  .action-btn { padding: 6px 12px; border-radius: 8px; border: none;
+    font-family: 'Gowun Dodum'; font-size: 12px; cursor: pointer;
+    background: linear-gradient(135deg, #FF6B9D, #FB7185); color: white; }
+  .action-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,107,157,.3); }
+  .action-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
     background: var(--text); color: white; padding: 12px 24px; border-radius: 50px;
     font-size: 14px; opacity: 0; transition: opacity .3s; z-index: 100;
@@ -58,28 +75,34 @@
   .toast.show { opacity: 1; }
   .toast.success { background: linear-gradient(135deg, #FF6B9D, #FB7185); }
   .toast.error { background: #DC2626; }
-  .loading { text-align: center; padding: 40px 20px; color: var(--muted); }
-  .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--pink-pale);
+  .loading { text-align: center; padding: 40px; color: var(--muted); }
+  .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid var(--pink-pale);
     border-top-color: var(--pink); border-radius: 50%; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .filter-hint { font-size: 12px; color: var(--muted); margin-left: 8px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="header">
     <h1>💗 설렘,스물 관리자</h1>
-    <p>오늘의 카드 - 개설비 입금 확인 후 카톡 아이디 교환</p>
-    <button class="refresh-btn" onclick="load()">🔄 새로고침</button>
+    <p>오늘의 카드 매칭 흐름 · 전체 이력</p>
   </div>
-  <div class="stats" id="stats">불러오는 중...</div>
-  <div id="list"></div>
+  <div class="toolbar">
+    <button class="btn" onclick="load()">🔄 새로고침</button>
+    <button class="btn" onclick="toggleFilter()" id="filterBtn">📅 오늘만 보기</button>
+  </div>
+  <div id="content">
+    <div class="loading"><div class="spinner"></div><p style="margin-top:12px">불러오는 중...</p></div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-var API = 'https://script.google.com/macros/s/AKfycbyfFmrwmLy-YPUnZxmU9uiFjqUjklMxGTCDcW2aKifa763oj3HQXU6vx8dGcvS01QRq/exec';
+var API = 'https://script.google.com/macros/s/AKfycbzkVbpExNeq49_cN1MCzRZh7yFW6aSRmhdWgMgqdKRl7E2FGNwIIqs-a7Nf53cmIxZF/exec';
+var STATE = { data: null, filterToday: false };
 
-function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function fmtTime(iso) {
   if (!iso) return '';
@@ -93,6 +116,15 @@ function fmtTime(iso) {
   } catch (e) { return iso; }
 }
 
+function isToday(iso) {
+  if (!iso) return false;
+  try {
+    var d = new Date(iso);
+    var now = new Date();
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+  } catch (e) { return false; }
+}
+
 function toast(msg, type) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -101,43 +133,170 @@ function toast(msg, type) {
   t._t = setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
+function toggleFilter() {
+  STATE.filterToday = !STATE.filterToday;
+  var btn = document.getElementById('filterBtn');
+  if (STATE.filterToday) { btn.classList.add('active'); btn.textContent = '📅 전체 보기'; }
+  else { btn.classList.remove('active'); btn.textContent = '📅 오늘만 보기'; }
+  render();
+}
+
+function parseStatus(s) {
+  // e.g. "대기" | "c1:yes" | "c1:yes,c2:no"
+  s = String(s || '');
+  if (!s || s === '대기') return { list: [], any: false };
+  var parts = s.split(',');
+  return {
+    list: parts.map(function(p) {
+      var m = p.match(/^c(\d+):(yes|no)$/);
+      return m ? { idx: parseInt(m[1], 10), choice: m[2] } : null;
+    }).filter(Boolean),
+    any: true
+  };
+}
+
+function chooseBadge(choice) {
+  if (choice === 'yes') return '<span class="badge yes">💗 좋아요</span>';
+  if (choice === 'no') return '<span class="badge no">🙅 다음에</span>';
+  return '<span class="badge wait">⏳ 응답 대기</span>';
+}
+
 async function load() {
-  document.getElementById('list').innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:12px">불러오는 중...</p></div>';
-  document.getElementById('stats').textContent = '불러오는 중...';
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:12px">불러오는 중...</p></div>';
   try {
-    var res = await fetch(API + '?admin=pending');
+    var res = await fetch(API + '?admin=all&t=' + Date.now());
     var data = await res.json();
-    if (!Array.isArray(data)) {
-      document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">⚠️</div>응답 형식 오류</div>';
-      return;
-    }
-    document.getElementById('stats').innerHTML = '입금 대기중 <strong>' + data.length + '</strong>건';
-    if (data.length === 0) {
-      document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">✨</div>대기중인 매칭이 없어요<br><span style="font-size:13px;margin-top:8px;display:inline-block">양쪽 좋아요 매칭이 발생하면 여기에 표시됩니다</span></div>';
-      return;
-    }
-    var html = data.map(function(p) {
-      return '<div class="card" id="pair_' + esc(p.pairId) + '">' +
-        '<div class="card-header">' +
-          '<div class="pair-name">💝 ' + esc(p.pairName) + '</div>' +
-          '<div class="pair-time">' + esc(fmtTime(p.time)) + '</div>' +
-        '</div>' +
-        '<div class="pair-id">' + esc(p.pairId) + '</div><br>' +
-        '<button class="action-btn confirm-btn" onclick="confirmPay(\'' + esc(p.pairId).replace(/\\'/g, "\\'") + '\')">✅ 입금 확인 → 카톡 교환 발송</button>' +
-      '</div>';
-    }).join('');
-    document.getElementById('list').innerHTML = html;
+    STATE.data = data;
+    render();
   } catch (err) {
-    document.getElementById('list').innerHTML = '<div class="empty"><div class="emoji">❌</div>불러오기 실패<br><span style="font-size:12px">' + esc(err.message || err) + '</span></div>';
-    document.getElementById('stats').textContent = '오류';
+    document.getElementById('content').innerHTML = '<div class="empty">❌ 불러오기 실패: ' + esc(err.message || err) + '</div>';
   }
+}
+
+function filterByToday(arr) {
+  if (!STATE.filterToday) return arr;
+  return arr.filter(function(x) { return isToday(x.time); });
+}
+
+function render() {
+  var d = STATE.data;
+  if (!d) return;
+  var cards = filterByToday(d.cards || []);
+  var notices = filterByToday(d.notices || []);
+  var pairs = filterByToday(d.pairs || []);
+
+  // Stats
+  var maleLikes = 0;
+  cards.forEach(function(c) {
+    var st = parseStatus(c.status);
+    st.list.forEach(function(x) { if (x.choice === 'yes') maleLikes++; });
+  });
+  var femaleYes = 0, femaleNo = 0, femaleWait = 0;
+  notices.forEach(function(n) {
+    var st = parseStatus(n.status);
+    if (!st.any) femaleWait++;
+    else st.list.forEach(function(x) {
+      if (x.choice === 'yes') femaleYes++;
+      else if (x.choice === 'no') femaleNo++;
+    });
+  });
+  var pending = pairs.filter(function(p) { return String(p.payStatus || '') !== '완료'; }).length;
+  var done = pairs.filter(function(p) { return String(p.openFeeStatus || '') === '카톡교환완료' || String(p.payStatus || '') === '완료'; }).length;
+
+  var html = '';
+  html += '<div class="stats-row">';
+  html += '<div class="stat pink"><div class="label">카드 발송(남자)</div><div class="value">' + cards.length + '</div></div>';
+  html += '<div class="stat purple"><div class="label">남자 좋아요</div><div class="value">' + maleLikes + '</div></div>';
+  html += '<div class="stat blue"><div class="label">여자 알림 발송</div><div class="value">' + notices.length + '</div></div>';
+  html += '<div class="stat green"><div class="label">여자 좋아요</div><div class="value">' + femaleYes + '</div></div>';
+  html += '<div class="stat orange"><div class="label">결제 대기</div><div class="value">' + pending + '</div></div>';
+  html += '</div>';
+
+  // Section 1: 카드 발송
+  html += '<section>';
+  html += '<h2>1️⃣ 오늘의 카드 발송 <span class="count">' + cards.length + '</span></h2>';
+  if (cards.length === 0) html += '<div class="empty">발송 이력 없음</div>';
+  else {
+    html += '<div class="table-wrap"><table>';
+    html += '<thead><tr><th>시각</th><th>받는 남자</th><th>후보 여자</th><th>남자 응답</th><th>매칭ID</th></tr></thead><tbody>';
+    cards.slice().reverse().forEach(function(c) {
+      var st = parseStatus(c.status);
+      var candCells = (c.candNames || []).map(function(n, i) {
+        var idx = i + 1;
+        var mine = st.list.find(function(x) { return x.idx === idx; });
+        var badge = mine ? chooseBadge(mine.choice) : '<span class="badge wait">응답대기</span>';
+        return '<div style="margin-bottom:4px">' + esc(n) + ' ' + badge + '</div>';
+      }).join('');
+      html += '<tr>';
+      html += '<td class="time">' + esc(fmtTime(c.time)) + '</td>';
+      html += '<td><span class="who">' + esc(c.recipName) + '</span><br><span class="time">row ' + esc(c.recipRow) + '</span></td>';
+      html += '<td>' + candCells + '</td>';
+      html += '<td>' + (st.any ? '<span class="badge yes">응답함</span>' : '<span class="badge wait">아직 안봄</span>') + '</td>';
+      html += '<td><span class="mid">' + esc(c.matchId) + '</span></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</section>';
+
+  // Section 2: 여자 알림 (남자가 좋아요 눌러서 발송된 것)
+  html += '<section>';
+  html += '<h2>2️⃣ 여자에게 호감 알림 <span class="count">' + notices.length + '</span><span class="filter-hint">남자가 좋아요 → 여자에게 알림 발송</span></h2>';
+  if (notices.length === 0) html += '<div class="empty">알림 발송 이력 없음</div>';
+  else {
+    html += '<div class="table-wrap"><table>';
+    html += '<thead><tr><th>시각</th><th>알림 받은 여자</th><th>좋아요 보낸 남자</th><th>여자 응답</th><th>매칭ID</th></tr></thead><tbody>';
+    notices.slice().reverse().forEach(function(n) {
+      var st = parseStatus(n.status);
+      var maleName = (n.candNames || [])[0] || '?';
+      var response = '<span class="badge wait">⏳ 응답 대기</span>';
+      if (st.any) {
+        var mine = st.list.find(function(x) { return x.idx === 1; });
+        if (mine) response = chooseBadge(mine.choice);
+      }
+      html += '<tr>';
+      html += '<td class="time">' + esc(fmtTime(n.time)) + '</td>';
+      html += '<td><span class="who">' + esc(n.recipName) + '</span><br><span class="time">row ' + esc(n.recipRow) + '</span></td>';
+      html += '<td><span class="who">' + esc(maleName) + '</span></td>';
+      html += '<td>' + response + '</td>';
+      html += '<td><span class="mid">' + esc(n.matchId) + '</span></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</section>';
+
+  // Section 3: 상호 매칭 pair
+  html += '<section>';
+  html += '<h2>3️⃣ 상호 매칭 <span class="count">' + pairs.length + '</span><span class="filter-hint">양쪽 좋아요 성사 · 개설비 19,000원</span></h2>';
+  if (pairs.length === 0) html += '<div class="empty">상호 매칭 없음</div>';
+  else {
+    html += '<div class="table-wrap"><table>';
+    html += '<thead><tr><th>시각</th><th>남녀</th><th>결제</th><th>개설비</th><th>매칭ID</th><th></th></tr></thead><tbody>';
+    pairs.slice().reverse().forEach(function(p) {
+      var payDone = String(p.payStatus || '') === '완료';
+      var openDone = String(p.openFeeStatus || '') === '카톡교환완료';
+      var payBadge = payDone ? '<span class="badge paid">💳 완료</span>' : '<span class="badge wait">대기</span>';
+      var openBadge = openDone ? '<span class="badge opened">💌 교환완료</span>' : '<span class="badge wait">대기</span>';
+      var actionBtn = (!payDone) ? '<button class="action-btn" onclick="confirmPay(\'' + esc(p.matchId) + '\')">✅ 입금확인</button>' : '';
+      html += '<tr>';
+      html += '<td class="time">' + esc(fmtTime(p.time)) + '</td>';
+      html += '<td><span class="who">' + esc(p.recipName) + '</span><span class="arrow">↔</span><span class="who">' + esc((p.candNames || [])[0] || '?') + '</span></td>';
+      html += '<td>' + payBadge + '</td>';
+      html += '<td>' + openBadge + '</td>';
+      html += '<td><span class="mid">' + esc(p.matchId) + '</span></td>';
+      html += '<td>' + actionBtn + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</section>';
+
+  document.getElementById('content').innerHTML = html;
 }
 
 async function confirmPay(pairId) {
   if (!window.confirm('입금 확인 완료로 처리하시겠습니까?\n남녀 양쪽에게 카톡 아이디 교환 문자가 발송됩니다.\n\n' + pairId)) return;
-  var card = document.getElementById('pair_' + pairId);
-  var btn = card ? card.querySelector('.confirm-btn') : null;
-  if (btn) { btn.disabled = true; btn.textContent = '처리 중...'; }
   try {
     var res = await fetch(API, {
       method: 'POST',
@@ -147,15 +306,12 @@ async function confirmPay(pairId) {
     var result = await res.json();
     if (result && result.ok) {
       toast('✅ 카톡 교환 문자 발송 완료', 'success');
-      if (card) card.style.opacity = '0.4';
       setTimeout(load, 1500);
     } else {
       toast('❌ 실패: ' + (result && result.err || '알 수 없음'), 'error');
-      if (btn) { btn.disabled = false; btn.textContent = '✅ 입금 확인 → 카톡 교환 발송'; }
     }
   } catch (err) {
     toast('❌ 네트워크 오류: ' + (err.message || err), 'error');
-    if (btn) { btn.disabled = false; btn.textContent = '✅ 입금 확인 → 카톡 교환 발송'; }
   }
 }
 
