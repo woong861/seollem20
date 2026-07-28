@@ -796,7 +796,7 @@ function decode(str) {
 }
 
 // Google Apps Script 백엔드 — 응답 자동 수집
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMzN6ljcp50x332kX7zOXHiyn5N9h9CJ6LLd1Mk8mnDmvmzlZCZ3ObVBI1LN8nwv_c/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjgzRGnvS50TOIauHSdQgQyStjw9zdDVHuWfzhrNXmL6ZiHMJDmy_vRorIQMHMoWy-/exec';
 
 function postToBackend(data) {
   fetch(APPS_SCRIPT_URL, {
@@ -827,6 +827,18 @@ function showError() {
   document.getElementById('errorCard').classList.add('active');
   matchData = null;
 }
+function parseSavedStatus(s) {
+  s = String(s || '');
+  if (!s || s === '대기') return {};
+  var out = {};
+  s.split(',').forEach(function(pt) {
+    var mm = pt.match(/^c(\d+):(yes|no)$/);
+    if (mm) out[parseInt(mm[1], 10)] = mm[2];
+  });
+  return out;
+}
+window.__savedResponses = {};
+
 if (!matchData && matchId && !p) {
   // 백엔드에서 matchId로 후보 조회 (URL 축소 방식)
   fetch(APPS_SCRIPT_URL + '?mid=' + encodeURIComponent(matchId))
@@ -836,6 +848,7 @@ if (!matchData && matchId && !p) {
         try { matchData = decode(data.p); } catch(e) {}
       }
       if (data && typeof data.n === 'number') window.__fetchedMaxLikes = data.n;
+      if (data && data.status) window.__savedResponses = parseSavedStatus(data.status);
       if (!matchData || !validData(matchData)) showError();
     })
     .catch(() => showError());
@@ -902,14 +915,33 @@ function buildMiniCard(p, num) {
 
   const introHtml = p.b ? '<div class="profile-mini-intro">' + escH(p.b) + '</div>' : '';
 
+  // 이미 응답한 후보면 disabled 상태 표시
+  var savedChoice = window.__savedResponses && window.__savedResponses[num];
+  var btnsHtml;
+  if (savedChoice === 'yes') {
+    card.classList.add('liked');
+    btnsHtml = '<div class="profile-mini-buttons" id="pbtns' + num + '">' +
+      '  <button class="mini-btn selected" disabled>✓ 좋아요 응답 완료</button>' +
+      '</div>';
+    multiState[num] = 'yes';
+  } else if (savedChoice === 'no') {
+    card.classList.add('skipped');
+    btnsHtml = '<div class="profile-mini-buttons" id="pbtns' + num + '">' +
+      '  <button class="mini-btn skipped-state" disabled>✓ 다음에 응답 완료</button>' +
+      '</div>';
+    multiState[num] = 'no';
+  } else {
+    btnsHtml = '<div class="profile-mini-buttons" id="pbtns' + num + '">' +
+      '  <button class="mini-btn yes" onclick="pickProfile(' + num + ', \'yes\')">💝 좋아요</button>' +
+      '  <button class="mini-btn no" onclick="pickProfile(' + num + ', \'no\')">🌸 다음에</button>' +
+      '</div>';
+  }
+
   card.innerHTML =
     '<div class="profile-mini-num">후보 ' + num + '번</div>' +
     (metaHtml ? '<div class="profile-mini-meta">' + metaHtml + '</div>' : '') +
     introHtml +
-    '<div class="profile-mini-buttons" id="pbtns' + num + '">' +
-    '  <button class="mini-btn yes" onclick="pickProfile(' + num + ', \'yes\')">💝 좋아요</button>' +
-    '  <button class="mini-btn no" onclick="pickProfile(' + num + ', \'no\')">🌸 다음에</button>' +
-    '</div>';
+    btnsHtml;
 
   return card;
 }

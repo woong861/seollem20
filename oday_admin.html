@@ -43,6 +43,17 @@
   section { margin-bottom: 32px; }
   section h2 { font-family: 'Noto Serif KR', serif; font-size: 18px; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
   section h2 .count { background: var(--pink-pale); color: var(--pink); font-family: 'Gowun Dodum'; font-size: 12px; padding: 2px 10px; border-radius: 20px; font-weight: normal; }
+  details { margin-bottom: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  details summary { padding: 14px 18px; cursor: pointer; font-family: 'Noto Serif KR', serif; font-size: 17px; color: var(--text); user-select: none; list-style: none; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; transition: background .15s; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: '▶'; color: var(--pink); font-size: 12px; transition: transform .2s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details summary:hover { background: var(--pink-pale); }
+  details summary .count { background: var(--pink-pale); color: var(--pink); font-family: 'Gowun Dodum'; font-size: 12px; padding: 2px 10px; border-radius: 20px; font-weight: normal; }
+  details summary .filter-hint { font-size: 12px; color: var(--muted); font-family: 'Gowun Dodum'; font-weight: normal; margin-left: auto; }
+  details > .content { padding: 0; }
+  details > .content .table-wrap { border-radius: 0; border: none; box-shadow: none; border-top: 1px solid var(--gray-pale); }
+  details > .content .empty { border-radius: 0; border-top: 1px solid var(--gray-pale); border-left: none; border-right: none; border-bottom: none; }
   .empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; }
   .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -212,9 +223,10 @@ function render() {
   html += '<div class="stat orange"><div class="label">결제 대기</div><div class="value">' + pending + '</div></div>';
   html += '</div>';
 
-  // Section 1: 카드 발송
-  html += '<section>';
-  html += '<h2>1️⃣ 오늘의 카드 발송 <span class="count">' + cards.length + '</span></h2>';
+  // Section 1: 카드 발송 (접힘 default)
+  html += '<details>';
+  html += '<summary>1️⃣ 오늘의 카드 발송 <span class="count">' + cards.length + '</span></summary>';
+  html += '<div class="content">';
   if (cards.length === 0) html += '<div class="empty">발송 이력 없음</div>';
   else {
     html += '<div class="table-wrap"><table>';
@@ -237,11 +249,12 @@ function render() {
     });
     html += '</tbody></table></div>';
   }
-  html += '</section>';
+  html += '</div></details>';
 
-  // Section 2: 여자 알림 (남자가 좋아요 눌러서 발송된 것)
-  html += '<section>';
-  html += '<h2>2️⃣ 여자에게 호감 알림 <span class="count">' + notices.length + '</span><span class="filter-hint">남자가 좋아요 → 여자에게 알림 발송</span></h2>';
+  // Section 2: 여자 알림 (default 열림)
+  html += '<details open>';
+  html += '<summary>2️⃣ 여자에게 호감 알림 <span class="count">' + notices.length + '</span><span class="filter-hint">남자가 좋아요 → 여자에게 알림</span></summary>';
+  html += '<div class="content">';
   if (notices.length === 0) html += '<div class="empty">알림 발송 이력 없음</div>';
   else {
     html += '<div class="table-wrap"><table>';
@@ -264,11 +277,12 @@ function render() {
     });
     html += '</tbody></table></div>';
   }
-  html += '</section>';
+  html += '</div></details>';
 
-  // Section 3: 상호 매칭 pair
-  html += '<section>';
-  html += '<h2>3️⃣ 상호 매칭 <span class="count">' + pairs.length + '</span><span class="filter-hint">양쪽 좋아요 성사 · 개설비 19,000원</span></h2>';
+  // Section 3: 상호 매칭 pair (default 열림)
+  html += '<details open>';
+  html += '<summary>3️⃣ 상호 매칭 <span class="count">' + pairs.length + '</span><span class="filter-hint">양쪽 좋아요 · 개설비 19,000원</span></summary>';
+  html += '<div class="content">';
   if (pairs.length === 0) html += '<div class="empty">상호 매칭 없음</div>';
   else {
     html += '<div class="table-wrap"><table>';
@@ -290,7 +304,7 @@ function render() {
     });
     html += '</tbody></table></div>';
   }
-  html += '</section>';
+  html += '</div></details>';
 
   document.getElementById('content').innerHTML = html;
 }
