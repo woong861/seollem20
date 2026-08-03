@@ -304,22 +304,27 @@ function render() {
   }
   html += '</div></details>';
 
-  // Section 3: 상호 매칭 pair (default 열림)
+  // Split pairs by completion
+  function isPairDone(p) {
+    var payStr = String(p.payStatus || '');
+    var openStr = String(p.openFeeStatus || '');
+    return (payStr === '완료' || payStr === '확인') || (openStr === '카톡교환완료' || openStr === '교환완료' || openStr === '완료');
+  }
+  var pairsActive = pairs.filter(function(p) { return !isPairDone(p); });
+  var pairsDone = pairs.filter(isPairDone);
+
+  // Section 3: 상호 매칭 (진행중 - 입금 대기)
   html += '<details open>';
-  html += '<summary>3️⃣ 상호 매칭 <span class="count">' + pairs.length + '</span><span class="filter-hint">양쪽 좋아요 · 개설비 19,000원</span></summary>';
+  html += '<summary>3️⃣ 상호 매칭 (입금 대기) <span class="count">' + pairsActive.length + '</span><span class="filter-hint">양쪽 좋아요 · 개설비 19,000원</span></summary>';
   html += '<div class="content">';
-  if (pairs.length === 0) html += '<div class="empty">상호 매칭 없음</div>';
+  if (pairsActive.length === 0) html += '<div class="empty">입금 대기 매칭 없음</div>';
   else {
     html += '<div class="table-wrap"><table>';
     html += '<thead><tr><th>시각</th><th>남녀</th><th>결제</th><th>개설비</th><th>매칭ID</th><th></th></tr></thead><tbody>';
-    pairs.slice().reverse().filter(function(p) { return matchesQuery([p.recipName].concat(p.candNames || [])); }).forEach(function(p) {
-      var payStr = String(p.payStatus || '');
-      var openStr = String(p.openFeeStatus || '');
-      var payDone = payStr === '완료' || payStr === '확인';
-      var openDone = openStr === '카톡교환완료' || openStr === '교환완료' || openStr === '완료';
-      var payBadge = payDone ? '<span class="badge paid">💳 확인완료</span>' : '<span class="badge wait">대기</span>';
-      var openBadge = openDone ? '<span class="badge opened">💌 교환완료</span>' : (payDone ? '<span class="badge paid">📨 발송됨</span>' : '<span class="badge wait">대기</span>');
-      var actionBtn = payDone ? '<span class="badge opened">✅ 처리완료</span>' : '<button class="action-btn" onclick="confirmPay(\'' + esc(p.matchId) + '\')">✅ 입금확인</button>';
+    pairsActive.slice().reverse().filter(function(p) { return matchesQuery([p.recipName].concat(p.candNames || [])); }).forEach(function(p) {
+      var payBadge = '<span class="badge wait">대기</span>';
+      var openBadge = '<span class="badge wait">대기</span>';
+      var actionBtn = '<button class="action-btn" onclick="confirmPay(\'' + esc(p.matchId) + '\')">✅ 입금확인</button>';
       html += '<tr>';
       html += '<td class="time">' + esc(fmtTime(p.time)) + '</td>';
       html += '<td><span class="who">' + esc(p.recipName) + '</span><span class="arrow">↔</span><span class="who">' + esc((p.candNames || [])[0] || '?') + '</span></td>';
@@ -327,6 +332,33 @@ function render() {
       html += '<td>' + openBadge + '</td>';
       html += '<td><span class="mid">' + esc(p.matchId) + '</span></td>';
       html += '<td>' + actionBtn + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '</div></details>';
+
+  // Section 4: 매칭 완료 (기본 접힘)
+  html += '<details>';
+  html += '<summary>4️⃣ 매칭 완료 <span class="count">' + pairsDone.length + '</span><span class="filter-hint">입금 확인 + 카톡 교환 완료</span></summary>';
+  html += '<div class="content">';
+  if (pairsDone.length === 0) html += '<div class="empty">완료된 매칭 없음</div>';
+  else {
+    html += '<div class="table-wrap"><table>';
+    html += '<thead><tr><th>시각</th><th>남녀</th><th>결제</th><th>개설비</th><th>매칭ID</th></tr></thead><tbody>';
+    pairsDone.slice().reverse().filter(function(p) { return matchesQuery([p.recipName].concat(p.candNames || [])); }).forEach(function(p) {
+      var payStr = String(p.payStatus || '');
+      var openStr = String(p.openFeeStatus || '');
+      var payDone = payStr === '완료' || payStr === '확인';
+      var openDone = openStr === '카톡교환완료' || openStr === '교환완료' || openStr === '완료';
+      var payBadge = payDone ? '<span class="badge paid">💳 확인완료</span>' : '<span class="badge wait">대기</span>';
+      var openBadge = openDone ? '<span class="badge opened">💌 교환완료</span>' : '<span class="badge paid">📨 발송됨</span>';
+      html += '<tr>';
+      html += '<td class="time">' + esc(fmtTime(p.time)) + '</td>';
+      html += '<td><span class="who">' + esc(p.recipName) + '</span><span class="arrow">↔</span><span class="who">' + esc((p.candNames || [])[0] || '?') + '</span></td>';
+      html += '<td>' + payBadge + '</td>';
+      html += '<td>' + openBadge + '</td>';
+      html += '<td><span class="mid">' + esc(p.matchId) + '</span></td>';
       html += '</tr>';
     });
     html += '</tbody></table></div>';
